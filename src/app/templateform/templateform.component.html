@@ -1,0 +1,78 @@
+<h1>Template Driven Forms</h1>
+<p>Template Driven forms. Validation passiert nur im HTML</p>
+<p><b>ngModel</b> muss da mindestens drinne stehen</p>
+<p>.ng-invalid ist eine css klasse die automatisch um die form geklatscht wird wenn invalid. mit input.ng-invalid kann man direkt das inputfeld selektieren</p>
+
+<hr>
+<small>Form ohne view Child in component. quasi irgendwie standalone</small>
+<small>#textA: local reference zum inputfeld textA für validation message</small>
+<form (ngSubmit)="onSubmitA(formA)" #formA="ngForm">
+    <input type="text"
+    ngModel
+    name="textA"
+    required
+    #textA = "ngModel"
+    >
+    <p *ngIf="!textA.valid && textA.touched" class="warning">Bitte hier irgendwas eingeben!</p>
+    <p >Deine eingabe: {{textA}}</p>
+    <button type="submit"
+    [disabled]="!formA.valid"
+    >Submit</button>
+</form>
+<hr>
+<small>Form mit viewchild in der Component. da hat man direkten zugriff auf die Form in der componente</small>
+
+<form (ngSubmit)="onSubmitB()" #formB="ngForm">
+    <input type="text" name="textB" ngModel>
+    <button type="submit">Submit</button>
+</form>
+
+<hr>
+<small>Form mit Model Binging. Nützlich für vorausgefüllte inputs</small>
+
+<p>Mit Binding sind verschiedene Dinge nötig</p>
+<ul>
+    <li>No binding: reines formular. nur submit gesteuert</li>
+    <li>one way bingin {{"["}}ngModel{{"]"}}="myprop": vorausgefüllte inputs</li>
+    <li>two way bingin  {{"[("}}ngModel{{")]"}}="myprop": realtime snapshot des inputs möglich mit {{"{{"}}myprop{{"}}"}}</li>
+</ul>
+
+<form (ngSubmit)="onSubmitC()" #formC="ngForm">
+    <input type="text" 
+    name="textC" 
+    [(ngModel)]="textValueC"
+    ><br>
+    <p>deine eingabe: {{textValueC}}</p>
+    <button type="submit">Submit</button>
+</form>
+
+<hr>
+
+<p>Template driven. Input Group. in der form ist jetzt ein objekt mit den keyvalue pairs der inputs und controls</p>
+<p>es können scheinbar mehrere gruppen in einer form existieren</p>
+    <form (ngSubmit)="onSubmitD(formD)" #formD="ngForm">
+        <div ngModelGroup="myModelGroup" #myGroupReference = "ngModelGroup">
+            <input type="text" name="groupTextA" ngModel required>*<br>
+            <input type="text" name="groupTextB" ngModel><br>
+        </div>
+        <p class="warning" *ngIf="!myGroupReference.valid">wutt.. FILL ME. at least the first field</p>
+    <button type="submit">Submit</button>
+</form>
+
+<hr>
+<p>Radiobuttons sind bissl strange. aber eigentlich nicht. unterscheiden sich nur in value</p>
+<form  #formE="ngForm">
+   A <input name="achoice" type="radio" ngModel value="A" >
+   B <input name="achoice" type="radio" ngModel value="B" >
+   {{formE.value | json}}
+</form>
+
+<hr>
+Prefill via Patch value. Man kann auch die gesamte Form setten, ist aber nicht so nice, wenn man viele leere Felder hat und nur bestimmte Inputs prefilled werden müssen.
+<form #formF="ngForm">
+    <input name="textFa" type="text" ngModel>
+    <input name="textFb" type="text" ngModel>
+    <button (click)="setValuesFormF()">set all values</button>
+    <button (click)="patchFormF()">patch only first input</button>
+    <button (click)="resetFormF()">reset</button>
+</form>

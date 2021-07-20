@@ -1,0 +1,21 @@
+<pre>ng g m sandbox --module app --routing true --route sandbox</pre>
+<table>
+    <tr *ngFor="let row of arr; let r=index">
+        <td *ngFor="let val of row; let c=index">
+            {{r}},{{c}}:<input type="text" [(ngModel)]="arr[r][c]" 
+            >
+            <!-- (input)="setValueAt(r,c, $event)" -->
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr *ngFor="let row of arr; let r=index">
+        <td *ngFor="let val of row; let c=index">
+            {{r}},{{c}}:{{arr[r][c]}}
+        </td>
+    </tr>
+</table>
+<hr>
+{{lastUpdate}}
+<pre>{{arr | json}}</pre>
